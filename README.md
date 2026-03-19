@@ -5,7 +5,7 @@ PicoCTF 2026 competition write-ups covering web exploitation, binary exploitatio
 
 **Author:** eightmonths  
 **Competition:** PicoCTF 2026  
-**Team Score:** 8200 points  
+**Team Score:** 8300 points  
 **Personal Contribution:** 8150 points  
 **Platform:** [play.picoctf.org](https://play.picoctf.org)
 
