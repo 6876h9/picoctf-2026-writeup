@@ -1,0 +1,71 @@
+# Reading One — The Threads That Connect Everything
+
+## How Binary Exploitation, Reverse Engineering, Cryptography, Forensics, and General Skills Operate as a Single Discipline
+
+---
+
+There is a version of CTF preparation that treats each category as its own island. You study binary exploitation in one block, cryptography in another, forensics in a third, and you assume that the skills you build in each column stay in that column. This is how most people start. It is also, eventually, why most people plateau.
+
+The longer you spend competing — and the harder the challenges get — the more obvious it becomes that this model is wrong. The categories are not islands. They are nodes in a network, and the connections between them are not incidental. They are structural. Understanding those connections is what separates someone who can solve the easy and medium challenges from someone who can work their way through the hard ones consistently.
+
+This reading is about those connections. It is not a guide to any specific challenge. It is a reflection on what this competition made clear about how these disciplines relate to each other, and why treating them as interconnected from the start produces better results than treating them as separate subjects that happen to appear on the same scoreboard.
+
+---
+
+## Binary Exploitation and Reverse Engineering Are the Same Skill Wearing Different Clothes
+
+The most obvious connection in this competition was between binary exploitation and reverse engineering. On the surface they look like different problems. Reverse engineering asks: what does this program do? Binary exploitation asks: how do I make this program do something it was not supposed to do? But the moment you start working through harder challenges in either category, you realize that answering one question almost always requires answering the other first.
+
+You cannot exploit a binary you do not understand. That is not a guideline, it is a hard constraint. A buffer overflow is only useful if you know where the overflow is, how much space you have before you reach the return address, what protections are in place, and what code you can redirect execution to. None of that information is handed to you. You have to read the binary, understand its structure, and build a mental model of what is happening at the memory level before a single byte of exploit code makes sense.
+
+Reverse engineering without the lens of exploitation is also incomplete. When you are tearing apart a stripped binary to understand what it does, knowing which patterns are exploitable changes what you pay attention to. You start flagging things — unchecked input lengths, format string arguments, suspicious function calls — not just because they help you understand the program, but because they might be the vulnerability. The two disciplines train the same underlying muscle: the ability to read a program at a level below what the source code would tell you, and reason about its behavior from first principles.
+
+Working through both categories back to back made this concrete in a way that reading about it never quite did. The tools are the same. The thinking process is the same. The difference is only in what you are trying to produce at the end.
+
+---
+
+## Cryptography Lives Inside Binaries More Than People Expect
+
+The second connection that became clear during this competition was between cryptography and binary exploitation and reverse engineering. Cryptography challenges are often presented as pure mathematical problems — here is a ciphertext, here is some partial information about the key, figure out the plaintext. And many of them are exactly that. But a significant number of the harder cryptography challenges this year had a binary component.
+
+The encryption logic was not described in the challenge text. It was implemented in a binary that you had to reverse engineer first. The vulnerability was not in the mathematics in the abstract — it was in how the mathematics had been implemented in code. A classic cryptographic construction that is secure in theory can be broken completely by a single implementation mistake: a nonce that gets reused, an IV that is predictable, a key derivation function that leaks information through timing, or an RNG that produces output with too little entropy.
+
+Finding those mistakes requires reading code. It requires the same static analysis skills you build doing reverse engineering. It requires the same attention to memory layout and data flow that makes you effective at binary exploitation. Someone who has only ever studied cryptography as a mathematical discipline and never spent time reading disassembled code will struggle with challenges that blur these lines.
+
+The practical lesson here is that cryptography knowledge without implementation literacy has a ceiling. You can recognize an RSA small exponent vulnerability in a challenge that tells you the parameters explicitly. You are in much better shape if you can also recognize it when the RSA parameters are buried in a binary and you have to extract them yourself before the math even starts.
+
+---
+
+## Forensics Teaches You to See What Is Not Obviously There
+
+Forensics occupies a different part of the skill space than binary exploitation or cryptography. It does not require the same kind of mathematical depth, and it does not require you to reason about memory layouts or assembly instructions. What it does require is a very specific and underappreciated skill: the ability to notice things that are present but not visible on first inspection.
+
+Every forensics challenge is built around the same fundamental idea. Something is hidden somewhere, and finding it requires knowing enough about how data is stored and transmitted that you can recognize when something is not quite right. A file that claims to be one type but has a different magic byte header. An image that has more data appended after the end-of-file marker. A packet capture where one particular stream carries a payload that looks slightly off. A disk image where the deleted file sectors have not been overwritten yet.
+
+What makes forensics genuinely useful as a discipline — beyond the competition context — is that it builds a very specific kind of perceptual habit. You stop taking things at face value. You start asking, every time you look at a piece of data: is this actually what it says it is, and is this the only thing here? That habit bleeds into every other category. It makes you a more careful binary analyst because you start questioning the assumptions baked into the decompiler output. It makes you a better cryptographer because you start looking for information leakage in places you were not specifically told to check.
+
+The scoreboard screenshot in the `proof/` folder of this repository was taken at the close of the competition and shows the personal point contribution and team total. The margin between the two numbers reflects the distribution of solves across all categories covered here.
+
+---
+
+## General Skills Is the Foundation That Nobody Talks About
+
+General skills is the category that gets the least discussion in CTF write-ups, and that is a mistake. The challenges in this category are often the easiest on the scoreboard, which leads people to treat it as warmup material rather than a discipline worth taking seriously. But what general skills actually teaches — and what this competition reinforced — is comfort at the command line and a genuine understanding of how Unix systems work at a low level.
+
+Every other category in this competition touched the command line. Running binaries, piping output between tools, writing quick Python scripts, redirecting files, reading man pages under time pressure, using netcat to interact with remote services — these are not optional skills that you can work around. They are the substrate that everything else runs on. Someone who is not fluent here is slower at everything, even if they understand the underlying concepts perfectly.
+
+There is also a category of general skills challenges that are not about command line fluency at all, but about encoding and data representation — base64, hex, binary, URL encoding, various cipher alphabets. These come up constantly as sub-problems inside forensics and cryptography challenges. Recognizing encoded data on sight, knowing immediately which decoder to reach for, and being able to chain multiple decoding steps without losing the thread — these are skills that look trivial in isolation but save significant time in the middle of a harder challenge.
+
+---
+
+## What Working Through All of Them Reveals
+
+The thing that working through all of these categories in a single competition makes clear is that cybersecurity is not actually a collection of separate skills that happen to share a name. It is one skill — the ability to understand systems at a level below what they are designed to show you — expressed across different surfaces.
+
+A binary is a system. A cryptographic protocol is a system. A file format is a system. A network packet is a system. The underlying question in every category is the same: does this system behave exactly as described, and if not, what does the gap between the description and the reality allow you to do? Every category trains a different aspect of the ability to answer that question. None of them answers it fully on its own.
+
+The competitors who perform best across all categories are not the ones who have memorized the most tools or practiced the most challenge types. They are the ones who have internalized this common underlying question deeply enough that they can apply it to unfamiliar surfaces quickly. That takes time, and it takes exposure to all of the categories — not sequentially, but in parallel, so the connections between them become visible.
+
+---
+
+*This reading is part of the `readings/` folder in the picoctf-2026-writeup repository.*
